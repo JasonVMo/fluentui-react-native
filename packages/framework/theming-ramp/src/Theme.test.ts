@@ -1,7 +1,5 @@
-import { ITheme, IPartialTheme } from './Theme.types';
+import { ITheme, IPartialTheme, IThemeColorDefinition, ITypography } from '@fluentui-react-native/theme-types';
 import { resolvePartialTheme } from './Theme';
-import { IThemeColorDefinition } from './Color.types';
-import { ITypography } from './Typography.types';
 
 const theme: ITheme = {
   colors: {

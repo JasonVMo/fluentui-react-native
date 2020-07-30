@@ -1,4 +1,4 @@
-import { IFontFamilies, IFontSizes, IFontWeights, IVariants, ITypography } from './Typography.types';
+import { IFontFamilies, IFontSizes, IFontWeights, IVariants, ITypography } from '@fluentui-react-native/theme-types';
 import { resolveFontFamily, resolveFontSize, resolveFontWeight } from './Typography';
 
 const families = {

@@ -1,4 +1,4 @@
-import { ITheme, IPartialTheme } from './Theme.types';
+import { ITheme, IPartialTheme } from '@fluentui-react-native/theme-types';
 import { mergeSettingsCollection } from '@uifabricshared/foundation-settings';
 import { MergeOptions, immutableMergeCore } from '@uifabricshared/immutable-merge';
 

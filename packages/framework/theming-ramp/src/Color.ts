@@ -1,4 +1,4 @@
-import { IPalette, IFabricWebPalette, IThemeColorDefinition, IColorRamp } from './Color.types';
+import { IPalette, IFabricWebPalette, IThemeColorDefinition, IColorRamp } from '@fluentui-react-native/theme-types';
 
 /**
  * Generate a palette from a set of fabric web colors, like those output from the theme designer.

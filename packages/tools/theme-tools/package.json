@@ -1,0 +1,30 @@
+{
+  "name": "@fluentui-react-native/theme-tools",
+  "version": "0.1.1",
+  "description": "Code ",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build-tools": "just-scripts build",
+    "lint": "fluentui-scripts eslint"
+  },
+  "dependencies": {
+    "ts-morph": "^7.1.2"
+  },
+  "devDependencies": {
+    "@fluentui-react-native/theme-types": ">=0.1.1 <1.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.1.0",
+    "@typescript-eslint/parser": "^2.1.0",
+    "eslint": ">= 6",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.2.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "just-scripts": "^0.36.1",
+    "typescript": "3.8.3"
+  },
+  "author": "",
+  "license": "MIT"
+}

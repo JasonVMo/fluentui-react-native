@@ -4,12 +4,15 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "lerna run build --stream",
-    "bundle": "lerna run bundle --stream"
+    "build": "lage build",
+    "buildci": "lage buildci",
+    "bundle": "lage bundle",
+    "lint": "lage lint",
+    "test": "lage test"
   },
   "devDependencies": {
-    "beachball": "^1.30.2",
-    "lerna": "^3.16.4"
+    "beachball": "^1.35.0",
+    "lage": ">=0.17.4 <1.0.0"
   },
   "workspaces": {
     "packages": [

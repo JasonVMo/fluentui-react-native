@@ -1,10 +1,10 @@
-import { parseGap, parsePadding } from './StackUtils';
+import { parseGap, parsePadding } from './FlexUtils';
 import { ITheme } from '@uifabricshared/theming-ramp';
 
 describe('StackUtils', () => {
   describe('parseGap', () => {
     const theme = ({
-      spacing: { m: '16em' }
+      spacing: { m: '16em' },
     } as unknown) as ITheme;
 
     it('returns a default value when given undefined', () => {
@@ -70,8 +70,8 @@ describe('StackUtils', () => {
         s1: '10px',
         m: '15px',
         l1: '20px',
-        l2: '25px'
-      }
+        l2: '25px',
+      },
     } as unknown) as ITheme;
 
     it('returns its argument when given undefined, a number, or an empty string', () => {

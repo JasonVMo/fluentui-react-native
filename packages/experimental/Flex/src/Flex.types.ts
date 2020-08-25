@@ -1,4 +1,4 @@
-import { StackItemProps } from './StackItem/StackItem.types';
+import { StackItemProps } from './FlexItem/FlexItem.types';
 import { ViewStyle, ViewProps } from 'react-native';
 import { IBorderTokens, FontTokens } from '@fluentui-react-native/tokens';
 

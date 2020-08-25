@@ -1,9 +1,9 @@
 /** @jsx withSlots */
 import * as React from 'react';
-import { stackItemName, StackItemType, StackItemProps } from './StackItem.types';
+import { stackItemName, StackItemType, StackItemProps } from './FlexItem.types';
 import { compose, UseSlots, withSlots, mergeProps } from '@fluentui-react-native/framework';
 import { View } from 'react-native';
-import { stylingSettings } from './StackItem.styles';
+import { stylingSettings } from './FlexItem.styles';
 
 export const StackItem = compose<StackItemType>({
   displayName: stackItemName,

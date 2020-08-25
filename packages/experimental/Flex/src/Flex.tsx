@@ -1,11 +1,11 @@
 /** @jsx withSlots */
 import * as React from 'react';
-import StackItem from './StackItem/StackItem';
-import { StackProps, stackName, StackType, StackTokens } from './Stack.types';
+import StackItem from './FlexItem/FlexItem';
+import { StackProps, stackName, StackType, StackTokens } from './Flex.types';
 import { View, ViewProps } from 'react-native';
 import { filterViewProps } from '@fluentui-react-native/adapters';
 import { compose, withSlots, mergeProps, UseSlots, getMemoCache } from '@fluentui-react-native/framework';
-import { stylingSettings } from './Stack.styling';
+import { stylingSettings } from './Flex.styling';
 
 const mixinCache = getMemoCache<ViewProps>();
 

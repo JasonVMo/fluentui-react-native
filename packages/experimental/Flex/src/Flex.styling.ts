@@ -1,5 +1,5 @@
-import { Alignment, StackSlotProps, StackTokens, StackProps, stackName, StackTokenProps } from './Stack.types';
-import { parseGap, parsePadding } from './StackUtils';
+import { Alignment, StackSlotProps, StackTokens, StackProps, stackName, StackTokenProps } from './Flex.types';
+import { parseGap, parsePadding } from './FlexUtils';
 import { ViewStyle, ViewProps } from 'react-native';
 import { ITheme } from '@uifabricshared/theming-ramp';
 import { UseStylingOptions, buildProps, GetMemoValue } from '@fluentui-react-native/framework';

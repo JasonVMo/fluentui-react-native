@@ -1,4 +1,4 @@
-import { StackItemTokens, StackItemProps, StackItemSlotProps, stackItemName } from './StackItem.types';
+import { StackItemTokens, StackItemProps, StackItemSlotProps, stackItemName } from './FlexItem.types';
 import { UseStylingOptions, getMemoCache } from '@fluentui-react-native/framework';
 import { ViewStyle, ViewProps } from 'react-native';
 

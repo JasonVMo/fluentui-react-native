@@ -1,6 +1,5 @@
 /** @jsx withSlots */
 import * as React from 'react';
-import StackItem from './FlexItem/FlexItem';
 import { StackProps, stackName, StackType, StackTokens } from './Flex.types';
 import { View, ViewProps } from 'react-native';
 import { filterViewProps } from '@fluentui-react-native/adapters';
@@ -27,9 +26,6 @@ function getMixinProps(horizontal: boolean, gap: StackTokens['gap']): ViewProps 
 export const Stack = compose<StackType>({
   displayName: stackName,
   ...stylingSettings,
-  statics: {
-    Item: StackItem,
-  },
   slots: {
     root: View,
     inner: View,

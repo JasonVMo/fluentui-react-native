@@ -1,4 +1,4 @@
-import { Alignment, StackSlotProps, StackTokens, StackProps, stackName, StackTokenProps } from './Flex.types';
+import { Alignment, FlexSlotProps, FlexTokens, FlexProps, FlexTokenProps } from './Flex.types';
 import { parseGap, parsePadding } from './FlexUtils';
 import { ViewStyle, ViewProps } from 'react-native';
 import { ITheme } from '@uifabricshared/theming-ramp';
@@ -22,7 +22,7 @@ function _mapAlignment(horizontal: boolean, horizontalAlign: Alignment, vertical
   }
 }
 
-const tokenProps: (keyof StackTokenProps)[] = [
+const tokenProps: (keyof FlexTokenProps)[] = [
   'childrenGap',
   'disableShrink',
   'gap',
@@ -40,7 +40,7 @@ const tokenProps: (keyof StackTokenProps)[] = [
 
 const nowrapProps: ViewProps = {};
 
-const buildInnerProps = (tokenProps: StackTokens, theme: ITheme, cache: GetMemoValue<ViewProps>) => {
+const buildInnerProps = (tokenProps: FlexTokens, theme: ITheme, cache: GetMemoValue<ViewProps>) => {
   // if wrapping is disabled just return a fixed empty object without doing any additional work
   if (!tokenProps.wrap) {
     return nowrapProps;
@@ -80,8 +80,8 @@ const buildInnerProps = (tokenProps: StackTokens, theme: ITheme, cache: GetMemoV
       }, [horizontal, horizontalAlign, verticalAlign, padding])[0];
 };
 
-const buildRootProps = buildProps<ViewProps, StackTokens>(
-  (tokenProps: StackTokens, theme: ITheme) => {
+const buildRootProps = buildProps<ViewProps, FlexTokens>(
+  (tokenProps: FlexTokens, theme: ITheme) => {
     const { grow, horizontal, horizontalAlign, verticalAlign, maxHeight, maxWidth, padding, wrap, reversed, verticalFill } = tokenProps;
 
     const rootStyle: ViewStyle = {
@@ -120,7 +120,7 @@ const buildRootProps = buildProps<ViewProps, StackTokens>(
   ],
 );
 
-export const stylingSettings: UseStylingOptions<StackProps, StackSlotProps, StackTokens> = {
+export const stylingSettings: UseStylingOptions<FlexProps, FlexSlotProps, FlexTokens> = {
   tokens: [stackName],
   tokenProps,
   slotProps: {

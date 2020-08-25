@@ -1,121 +1,87 @@
-import { StackItemProps } from './FlexItem/FlexItem.types';
-import { ViewStyle, ViewProps } from 'react-native';
+import { ViewProps } from 'react-native';
 import { IBorderTokens, FontTokens } from '@fluentui-react-native/tokens';
 
-export const stackName = 'Stack';
+/**
+ * Note that this component is designed to be as similar as possible to the components that are part of the react-flex package from fluentui
+ */
 
 /**
  * Defines a type made by the union of the different values that the align-items and justify-content flexbox
  * properties can take.
  */
-export type Alignment = ViewStyle['justifyContent'] | 'start' | 'end';
+export type Alignment = 'auto' | 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly' | 'baseline' | 'stretch';
 
-export interface StackStatics {
-  Item: React.FunctionComponent<StackItemProps>;
+/**
+ * This is the set of tokens which are available for usage directly in props
+ */
+export interface FlexTokenProps {
+  /**
+   * Defines if container should be rendered as an inline block element or as a regular block element.
+   */
+  inline?: boolean;
+  /**
+   * Sets vertical flow direction.
+   */
+  column?: boolean;
+  /**
+   * Defines whether the content inside of `Flex` wraps when trying to extend beyond its boundaries.
+   */
+  wrap?: boolean;
+  /**
+   * Defines how to align the children horizontally (along the x-axis).
+   */
+  horizontalAlign?: Alignment;
+  /**
+   * Defines how to align the children vertically (along the y-axis).
+   */
+  verticalAlign?: Alignment;
+  /**
+   * Defines whether to render the children in the opposite direction.
+   */
+  reverse?: boolean;
+  /**
+   * Defines whether the children should not shrink to fit the available space.
+   */
+  disableShrink?: boolean;
+  /**
+   * Defines whether the container should take up 100% of the height of its parent.
+   */
+  fluid?: boolean;
+  /**
+   * Defines the padding to be applied to the Flex contents relative to its border.
+   */
+  padding?: string;
+  /**
+   * Defines the spacing between the children.
+   */
+  gap?: string;
 }
 
 /**
- * Tokens from fabric.  Right now they are embedded in the props pending discussions of whether tokens: {} is
- * the right approach
+ * Flex props add a subset of tokens to the base ViewProps
  */
-export interface StackTokenProps {
-  /**
-   * Defines the spacing between Stack children.
-   * The property is specified as a value for 'row gap', followed optionally by a value for 'column gap'.
-   * If 'column gap' is omitted, it's set to the same value as 'row gap'.
-   */
-  childrenGap?: number | string;
+export type FlexProps = FlexTokenProps & ViewProps;
 
+/**
+ * Customizeable token values for the Flex component
+ */
+export interface FlexTokens extends FlexTokenProps, FontTokens, IBorderTokens {
   /**
-   * Defines a maximum height for the Stack.
-   */
-  maxHeight?: number | string;
-
-  /**
-   * Defines a maximum width for the Stack.
-   */
-  maxWidth?: number | string;
-
-  /**
-   * Defines the padding to be applied to the Stack contents relative to its border.
-   */
-  padding?: number | string;
-
-  /**
-   * Defines whether to render Stack children horizontally.
-   * @defaultvalue false
-   */
-  horizontal?: boolean;
-
-  /**
-   * Defines whether to render Stack children in the opposite direction (bottom-to-top if it's a vertical Stack and
-   * right-to-left if it's a horizontal Stack).
-   * @defaultvalue false
-   */
-  reversed?: boolean;
-
-  /**
-   * Defines how to align Stack children horizontally (along the x-axis).
-   */
-  horizontalAlign?: Alignment;
-
-  /**
-   * Defines how to align Stack children vertically (along the y-axis).
-   */
-  verticalAlign?: Alignment;
-
-  /**
-   * Defines whether the Stack should take up 100% of the height of its parent.
-   * This property is required to be set to true when using the `grow` flag on children in vertical oriented Stacks.
-   * Stacks are rendered as block elements and grow horizontally to the container already.
-   * @defaultvalue false
-   */
-  verticalFill?: boolean;
-
-  /**
-   * Defines whether Stack children should not shrink to fit the available space.
-   * @defaultvalue false
-   */
-  disableShrink?: boolean;
-
-  /**
-   * Defines how much to grow the Stack in proportion to its siblings.
-   */
-  grow?: boolean | number;
-
-  /**
-   * Defines whether Stack children should wrap onto multiple rows or columns when they are about to overflow
-   * the size of the Stack.
-   * @defaultvalue false
-   */
-  wrap?: boolean;
-
-  /**
-   * Gap between items, multiplied by theme gap spacing
-   */
-  gap?: number;
-}
-
-export interface StackTokens extends FontTokens, IBorderTokens, StackTokenProps {
-  /**
-   * background color for the stack
+   * background color for the flex component
    */
   backgroundColor?: string;
 }
 
 /**
- * Base property definitions, these generally match fabric
+ * Flex slot props
  */
-export interface StackProps extends StackTokenProps, ViewProps {}
-
-export type StackSlotProps = {
+export interface FlexSlotProps {
   root: ViewProps;
   inner: ViewProps;
-};
+}
 
-export interface StackType {
-  props: StackProps;
-  tokens: StackTokens;
-  slotProps: StackSlotProps;
-  statics: StackStatics;
+export interface FlexType {
+  props: FlexProps;
+  tokens: FlexTokens;
+  slotProps: FlexSlotProps;
 }

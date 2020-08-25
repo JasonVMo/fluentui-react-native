@@ -1,7 +1,7 @@
 {
-  "name": "@fluentui-react-native/experimental-stack",
+  "name": "@fluentui-react-native/flex",
   "version": "0.1.0",
-  "description": "A cross-platform opinionated Fluent Text component",
+  "description": "A convenience wrapper for making flexbox styling easier to use",
   "main": "src/index.ts",
   "module": "src/index.ts",
   "typings": "lib/index.d.ts",
@@ -9,7 +9,6 @@
     "main": "lib-commonjs/index.js",
     "module": "lib/index.js"
   },
-  "private": true,
   "scripts": {
     "build": "fluentui-scripts build",
     "clean": "fluentui-scripts clean",

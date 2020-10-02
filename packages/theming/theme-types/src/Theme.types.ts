@@ -41,23 +41,3 @@ export type PartialTheme = Omit<TwoLevelPartial<Theme>, 'typography' | 'host'> &
   typography?: PartialTypography;
   host?: TwoLevelPartial<Theme['host']>;
 };
-
-/**
- * A partially specified theme.
- *
- * Useful for overriding specific visual elements in a fully specified theme.
- */
-export interface PartialTheme2 {
-  name?: string;
-  colors?: Partial<ThemeColorDefinition>;
-  typography?: PartialTypography;
-  components?: { [key: string]: object };
-  componentTokens?: object;
-  spacing?: Partial<Spacing>;
-  host?: {
-    // appearance of the theme, this corresponds to the react-native Appearance library values, though can be overwritten
-    appearance?: 'light' | 'dark';
-
-    palette?: Partial<OfficePalette>;
-  };
-}

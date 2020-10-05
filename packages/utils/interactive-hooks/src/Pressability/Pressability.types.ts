@@ -56,6 +56,11 @@ export type PressabilityConfig = Readonly<{
   delayPressOut?: number;
 
   /**
+   * Minimum duration to wait between calling `onPressIn` and `onPressOut`.
+   */
+  minPressDuration?: number;
+
+  /**
    * Called after the element loses focus.
    */
   onBlur?: (event: BlurEvent) => any;

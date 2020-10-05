@@ -18,7 +18,6 @@ import { isHoverEnabled } from './HoverState';
 import { HostComponent, normalizeRect, Rect } from './InternalTypes';
 import { PressabilityConfig, PressabilityEventHandlers } from './Pressability.types';
 
-
 type TouchState =
   | 'NOT_RESPONDER'
   | 'RESPONDER_INACTIVE_PRESS_IN'
@@ -46,7 +45,7 @@ const Transitions: { [K in TouchState]: { [T in TouchSignal]: TouchState } } = {
     RESPONDER_TERMINATED: 'ERROR',
     ENTER_PRESS_RECT: 'ERROR',
     LEAVE_PRESS_RECT: 'ERROR',
-    LONG_PRESS_DETECTED: 'ERROR'
+    LONG_PRESS_DETECTED: 'ERROR',
   },
   RESPONDER_INACTIVE_PRESS_IN: {
     DELAY: 'RESPONDER_ACTIVE_PRESS_IN',
@@ -55,7 +54,7 @@ const Transitions: { [K in TouchState]: { [T in TouchSignal]: TouchState } } = {
     RESPONDER_TERMINATED: 'NOT_RESPONDER',
     ENTER_PRESS_RECT: 'RESPONDER_INACTIVE_PRESS_IN',
     LEAVE_PRESS_RECT: 'RESPONDER_INACTIVE_PRESS_OUT',
-    LONG_PRESS_DETECTED: 'ERROR'
+    LONG_PRESS_DETECTED: 'ERROR',
   },
   RESPONDER_INACTIVE_PRESS_OUT: {
     DELAY: 'RESPONDER_ACTIVE_PRESS_OUT',
@@ -64,7 +63,7 @@ const Transitions: { [K in TouchState]: { [T in TouchSignal]: TouchState } } = {
     RESPONDER_TERMINATED: 'NOT_RESPONDER',
     ENTER_PRESS_RECT: 'RESPONDER_INACTIVE_PRESS_IN',
     LEAVE_PRESS_RECT: 'RESPONDER_INACTIVE_PRESS_OUT',
-    LONG_PRESS_DETECTED: 'ERROR'
+    LONG_PRESS_DETECTED: 'ERROR',
   },
   RESPONDER_ACTIVE_PRESS_IN: {
     DELAY: 'ERROR',
@@ -73,7 +72,7 @@ const Transitions: { [K in TouchState]: { [T in TouchSignal]: TouchState } } = {
     RESPONDER_TERMINATED: 'NOT_RESPONDER',
     ENTER_PRESS_RECT: 'RESPONDER_ACTIVE_PRESS_IN',
     LEAVE_PRESS_RECT: 'RESPONDER_ACTIVE_PRESS_OUT',
-    LONG_PRESS_DETECTED: 'RESPONDER_ACTIVE_LONG_PRESS_IN'
+    LONG_PRESS_DETECTED: 'RESPONDER_ACTIVE_LONG_PRESS_IN',
   },
   RESPONDER_ACTIVE_PRESS_OUT: {
     DELAY: 'ERROR',
@@ -82,7 +81,7 @@ const Transitions: { [K in TouchState]: { [T in TouchSignal]: TouchState } } = {
     RESPONDER_TERMINATED: 'NOT_RESPONDER',
     ENTER_PRESS_RECT: 'RESPONDER_ACTIVE_PRESS_IN',
     LEAVE_PRESS_RECT: 'RESPONDER_ACTIVE_PRESS_OUT',
-    LONG_PRESS_DETECTED: 'ERROR'
+    LONG_PRESS_DETECTED: 'ERROR',
   },
   RESPONDER_ACTIVE_LONG_PRESS_IN: {
     DELAY: 'ERROR',
@@ -91,7 +90,7 @@ const Transitions: { [K in TouchState]: { [T in TouchSignal]: TouchState } } = {
     RESPONDER_TERMINATED: 'NOT_RESPONDER',
     ENTER_PRESS_RECT: 'RESPONDER_ACTIVE_LONG_PRESS_IN',
     LEAVE_PRESS_RECT: 'RESPONDER_ACTIVE_LONG_PRESS_OUT',
-    LONG_PRESS_DETECTED: 'RESPONDER_ACTIVE_LONG_PRESS_IN'
+    LONG_PRESS_DETECTED: 'RESPONDER_ACTIVE_LONG_PRESS_IN',
   },
   RESPONDER_ACTIVE_LONG_PRESS_OUT: {
     DELAY: 'ERROR',
@@ -100,7 +99,7 @@ const Transitions: { [K in TouchState]: { [T in TouchSignal]: TouchState } } = {
     RESPONDER_TERMINATED: 'NOT_RESPONDER',
     ENTER_PRESS_RECT: 'RESPONDER_ACTIVE_LONG_PRESS_IN',
     LEAVE_PRESS_RECT: 'RESPONDER_ACTIVE_LONG_PRESS_OUT',
-    LONG_PRESS_DETECTED: 'ERROR'
+    LONG_PRESS_DETECTED: 'ERROR',
   },
   ERROR: {
     DELAY: 'NOT_RESPONDER',
@@ -109,27 +108,27 @@ const Transitions: { [K in TouchState]: { [T in TouchSignal]: TouchState } } = {
     RESPONDER_TERMINATED: 'NOT_RESPONDER',
     ENTER_PRESS_RECT: 'NOT_RESPONDER',
     LEAVE_PRESS_RECT: 'NOT_RESPONDER',
-    LONG_PRESS_DETECTED: 'NOT_RESPONDER'
-  }
+    LONG_PRESS_DETECTED: 'NOT_RESPONDER',
+  },
 };
 
-const isActiveSignal = signal => signal === 'RESPONDER_ACTIVE_PRESS_IN' || signal === 'RESPONDER_ACTIVE_LONG_PRESS_IN';
+const isActiveSignal = (signal) => signal === 'RESPONDER_ACTIVE_PRESS_IN' || signal === 'RESPONDER_ACTIVE_LONG_PRESS_IN';
 
-const isActivationSignal = signal => signal === 'RESPONDER_ACTIVE_PRESS_OUT' || signal === 'RESPONDER_ACTIVE_PRESS_IN';
+const isActivationSignal = (signal) => signal === 'RESPONDER_ACTIVE_PRESS_OUT' || signal === 'RESPONDER_ACTIVE_PRESS_IN';
 
-const isPressInSignal = signal =>
+const isPressInSignal = (signal) =>
   signal === 'RESPONDER_INACTIVE_PRESS_IN' || signal === 'RESPONDER_ACTIVE_PRESS_IN' || signal === 'RESPONDER_ACTIVE_LONG_PRESS_IN';
 
-const isTerminalSignal = signal => signal === 'RESPONDER_TERMINATED' || signal === 'RESPONDER_RELEASE';
+const isTerminalSignal = (signal) => signal === 'RESPONDER_TERMINATED' || signal === 'RESPONDER_RELEASE';
 
-const DEFAULT_LONG_PRESS_DELAY_MS = 370; // 500 - 130
-const DEFAULT_PRESS_DELAY_MS = 130;
+const DEFAULT_LONG_PRESS_DELAY_MS = 500; // 500 - 130
 const DEFAULT_PRESS_RECT_OFFSETS: Rect = {
   bottom: 30,
   left: 20,
   right: 20,
-  top: 20
+  top: 20,
 };
+const DEFAULT_MIN_PRESS_DURATION = 130;
 
 function normalizeDelay(delay?: number, min: number = 0, fallback: number = 0): number {
   return Math.max(min, delay ?? fallback);
@@ -255,6 +254,7 @@ export class Pressability {
     pageX: number;
     pageY: number;
   }>;
+  private _touchActivateTime = Date.now();
   private _touchState: TouchState = 'NOT_RESPONDER';
 
   constructor(config: PressabilityConfig) {
@@ -274,6 +274,10 @@ export class Pressability {
     this._cancelLongPressDelayTimeout();
     this._cancelPressDelayTimeout();
     this._cancelPressOutDelayTimeout();
+
+    // Ensure that, if any async event handlers are fired after unmount
+    // due to a race, we don't call any configured callbacks.
+    this._config = Object.freeze({});
   }
 
   /**
@@ -299,7 +303,7 @@ export class Pressability {
         if (onFocus != null) {
           onFocus(event);
         }
-      }
+      },
     };
 
     const responderEventHandlers = {
@@ -320,7 +324,7 @@ export class Pressability {
         this._touchState = 'NOT_RESPONDER';
         this._receiveSignal('RESPONDER_GRANT', event);
 
-        const delayPressIn = normalizeDelay(this._config.delayPressIn, 0, DEFAULT_PRESS_DELAY_MS);
+        const delayPressIn = normalizeDelay(this._config.delayPressIn);
 
         if (delayPressIn > 0) {
           this._pressDelayTimeout = setTimeout(() => {
@@ -330,7 +334,7 @@ export class Pressability {
           this._receiveSignal('DELAY', event);
         }
 
-        const delayLongPress = normalizeDelay(this._config.delayLongPress, 10, DEFAULT_LONG_PRESS_DELAY_MS);
+        const delayLongPress = normalizeDelay(this._config.delayLongPress, 10, DEFAULT_LONG_PRESS_DELAY_MS - delayPressIn);
         this._longPressDelayTimeout = setTimeout(() => {
           this._handleLongPress(event);
         }, delayLongPress + delayPressIn);
@@ -388,54 +392,56 @@ export class Pressability {
         if (onPress != null) {
           onPress(event);
         }
-      }
+      },
     };
 
     const mouseEventHandlers =
       Platform.OS === 'ios' || Platform.OS === 'android'
         ? null
         : {
-          onMouseEnter: (event: MouseEvent): void => {
-            if (isHoverEnabled()) {
-              this._isHovered = true;
-              this._cancelHoverOutDelayTimeout();
-              const { onHoverIn } = this._config;
-              if (onHoverIn != null) {
-                const delayHoverIn = normalizeDelay(this._config.delayHoverIn);
-                if (delayHoverIn > 0) {
-                  this._hoverInDelayTimeout = setTimeout(() => {
+            onMouseEnter: (event: MouseEvent): void => {
+              if (isHoverEnabled()) {
+                this._isHovered = true;
+                this._cancelHoverOutDelayTimeout();
+                const { onHoverIn } = this._config;
+                if (onHoverIn != null) {
+                  const delayHoverIn = normalizeDelay(this._config.delayHoverIn);
+                  if (delayHoverIn > 0) {
+                    event.persist();
+                    this._hoverInDelayTimeout = setTimeout(() => {
+                      onHoverIn(event);
+                    }, delayHoverIn);
+                  } else {
                     onHoverIn(event);
-                  }, delayHoverIn);
-                } else {
-                  onHoverIn(event);
+                  }
                 }
               }
-            }
-          },
+            },
 
-          onMouseLeave: (event: MouseEvent): void => {
-            if (this._isHovered) {
-              this._isHovered = false;
-              this._cancelHoverInDelayTimeout();
-              const { onHoverOut } = this._config;
-              if (onHoverOut != null) {
-                const delayHoverOut = normalizeDelay(this._config.delayHoverOut);
-                if (delayHoverOut > 0) {
-                  this._hoverInDelayTimeout = setTimeout(() => {
+            onMouseLeave: (event: MouseEvent): void => {
+              if (this._isHovered) {
+                this._isHovered = false;
+                this._cancelHoverInDelayTimeout();
+                const { onHoverOut } = this._config;
+                if (onHoverOut != null) {
+                  const delayHoverOut = normalizeDelay(this._config.delayHoverOut);
+                  if (delayHoverOut > 0) {
+                    event.persist();
+                    this._hoverInDelayTimeout = setTimeout(() => {
+                      onHoverOut(event);
+                    }, delayHoverOut);
+                  } else {
                     onHoverOut(event);
-                  }, delayHoverOut);
-                } else {
-                  onHoverOut(event);
+                  }
                 }
               }
-            }
-          }
-        };
+            },
+          };
 
     return {
       ...focusEventHandlers,
       ...responderEventHandlers,
-      ...mouseEventHandlers
+      ...mouseEventHandlers,
     };
   }
 
@@ -454,7 +460,7 @@ export class Pressability {
       'Pressability: Invalid signal `%s` for state `%s` on responder: %s',
       signal,
       prevState,
-      typeof this._responderID === 'number' ? this._responderID : '<<host component>>'
+      typeof this._responderID === 'number' ? this._responderID : '<<host component>>',
     );
     if (prevState !== nextState) {
       this._performTransitionSideEffects(prevState, nextState, signal, event);
@@ -497,16 +503,16 @@ export class Pressability {
     }
 
     if (isPressInSignal(prevState) && signal === 'RESPONDER_RELEASE') {
+      // If we never activated (due to delays), activate and deactivate now.
+      if (!isNextActive && !isPrevActive) {
+        this._activate(event);
+        this._deactivate(event);
+      }
       const { onLongPress, onPress /*, android_disableSound */ } = this._config;
       if (onPress != null) {
         const isPressCanceledByLongPress =
           onLongPress != null && prevState === 'RESPONDER_ACTIVE_LONG_PRESS_IN' && this._shouldLongPressCancelPress();
         if (!isPressCanceledByLongPress) {
-          // If we never activated (due to delays), activate and deactivate now.
-          if (!isNextActive && !isPrevActive) {
-            this._activate(event);
-            this._deactivate(event);
-          }
           /*
           if (Platform.OS === 'android' && android_disableSound !== true) {
             SoundManager.playTouchSound();
@@ -525,7 +531,7 @@ export class Pressability {
     const touch = getTouchFromPressEvent(event);
     this._touchActivatePosition = {
       pageX: touch.pageX,
-      pageY: touch.pageY
+      pageY: touch.pageY,
     };
     if (onPressIn != null) {
       onPressIn(event);
@@ -535,8 +541,12 @@ export class Pressability {
   private _deactivate(event: PressEvent): void {
     const { onPressOut } = this._config;
     if (onPressOut != null) {
-      const delayPressOut = normalizeDelay(this._config.delayPressOut);
+      const minPressDuration = normalizeDelay(this._config.minPressDuration, 0, DEFAULT_MIN_PRESS_DURATION);
+      const pressDuration = Date.now() - (this._touchActivateTime ?? 0);
+
+      const delayPressOut = Math.max(minPressDuration - pressDuration, normalizeDelay(this._config.delayPressOut));
       if (delayPressOut > 0) {
+        event.persist();
         this._pressOutDelayTimeout = setTimeout(() => {
           onPressOut(event);
         }, delayPressOut);
@@ -544,6 +554,7 @@ export class Pressability {
         onPressOut(event);
       }
     }
+    this._touchActivateTime = null;
   }
 
   private _measureResponderRegion(): void {
@@ -553,7 +564,7 @@ export class Pressability {
 
     if (typeof this._responderID === 'number') {
       UIManager.measure(this._responderID, this._measureCallback);
-    } else {
+    } else if (typeof this._responderID.measure === 'function') {
       this._responderID.measure(this._measureCallback);
     }
   }
@@ -566,7 +577,7 @@ export class Pressability {
       bottom: pageY + height,
       left: pageX,
       right: pageX + width,
-      top: pageY
+      top: pageY,
     };
   };
 

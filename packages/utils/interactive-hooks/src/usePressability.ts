@@ -16,7 +16,7 @@ import { useEffect, useRef } from 'react';
 
 export function usePressability(config: PressabilityConfig): PressabilityEventHandlers {
   const pressabilityRef = useRef<Pressability>(null);
-  if (pressabilityRef.current == null) {
+  if (config != null && pressabilityRef.current == null) {
     pressabilityRef.current = new Pressability(config);
   }
   const pressability = pressabilityRef.current;
@@ -24,16 +24,20 @@ export function usePressability(config: PressabilityConfig): PressabilityEventHa
   // On the initial mount, this is a no-op. On updates, `pressability` will be
   // re-configured to use the new configuration.
   useEffect(() => {
-    pressability.configure(config);
+    if (config != null && pressability != null) {
+      pressability.configure(config);
+    }
   }, [config, pressability]);
 
   // On unmount, reset pending state and timers inside `pressability`. This is
   // a separate effect because we do not want to reset when `config` changes.
   useEffect(() => {
-    return () => {
-      pressability.reset();
-    };
+    return pressability != null
+      ? () => {
+          pressability.reset();
+        }
+      : null;
   }, [pressability]);
 
-  return pressability.getEventHandlers();
+  return pressability == null ? null : pressability.getEventHandlers();
 }

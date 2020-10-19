@@ -8,6 +8,10 @@
  * @format
  */
 
+/**
+ * Note that this code is temporarily adapted to run in here until we can be on 0.63 officially. This will then be routed to the official representation
+ */
+
 'use strict';
 
 import invariant from 'invariant';

@@ -2,7 +2,7 @@ import { RectOrSize } from './InternalTypes';
 import { BlurEvent, FocusEvent, PressEvent, MouseEvent } from './CoreEventTypes';
 import { ViewProps } from 'react-native';
 
-export type PressabilityConfig = Readonly<{
+export interface PressabilityConfig extends ViewProps {
   /**
    * Whether a press gesture can be interrupted by a parent gesture such as a
    * scroll event. Defaults to true.
@@ -104,7 +104,7 @@ export type PressabilityConfig = Readonly<{
    * Called when the press is deactivated to undo visual feedback.
    */
   onPressOut?: (event: PressEvent) => any;
-}>;
+}
 
 export type PressabilityEventHandlers = Readonly<{
   onBlur: (event: BlurEvent) => void;

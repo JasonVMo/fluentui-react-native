@@ -112,7 +112,7 @@
     "flow-bin": "^0.113.0",
     "metro-config": "^0.80.0",
     "react-native-svg-transformer": "^1.0.0",
-    "react-native-test-app": "^3.4.7",
+    "react-native-test-app": "^2.5.34",
     "react-test-renderer": "18.2.0",
     "webdriverio": "^8.40.0"
   },

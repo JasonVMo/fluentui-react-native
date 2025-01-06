@@ -9,11 +9,12 @@ const { clean } = require('./tasks/clean');
 const { copy } = require('./tasks/copy');
 const { jest } = require('./tasks/jest');
 const { ts } = require('./tasks/ts');
-const { codegenNativeComponents } = require('./tasks/codegenNativeComponents')
+const { codegenNativeComponents } = require('./tasks/codegenNativeComponents');
 const { eslint } = require('./tasks/eslint');
 const { depcheckTask } = require('./tasks/depcheck');
 const { checkForModifiedFiles } = require('./tasks/checkForModifiedFilesTask');
 const { findGitRoot } = require('workspace-tools');
+const { checkTypes } = require('./tools-typescript/checkTypes');
 
 export function preset() {
   // this add s a resolve path for the build tooling deps like TS from the scripts folder
@@ -38,6 +39,7 @@ export function preset() {
   task('ts:esm', ts.esm);
   task('eslint', eslint);
   task('ts:commonjs-only', ts.commonjsOnly);
+  task('checkTypes', checkTypes);
   task('prettier', () =>
     argv().fix
       ? prettierTask({ files: ['src/.'], ignorePath: path.join(findGitRoot(process.cwd()), '.prettierignore') })

@@ -12,22 +12,18 @@ function getExtraTscParams(args) {
 module.exports.ts = {
   commonjs: () => {
     const extraOptions = getExtraTscParams(argv());
-    return tscTask({ ...extraOptions, outDir: 'lib-commonjs', module: 'commonjs', noCheck: true });
+    return tscTask({ ...extraOptions, outDir: 'lib-commonjs', module: 'commonjs' });
   },
   esm: () => {
     const extraOptions = getExtraTscParams(argv());
-    return tscTask({ ...extraOptions, outDir: 'lib', module: 'esnext', noCheck: true });
+    return tscTask({ ...extraOptions, outDir: 'lib', module: 'esnext' });
   },
   amd: () => {
     const extraOptions = getExtraTscParams(argv());
-    return tscTask({ ...extraOptions, outDir: 'lib-amd', module: 'amd', noCheck: true });
+    return tscTask({ ...extraOptions, outDir: 'lib-amd', module: 'amd' });
   },
   commonjsOnly: () => {
     const extraOptions = getExtraTscParams(argv());
-    return tscTask({ ...extraOptions, outDir: 'lib', module: 'commonjs', noCheck: true });
-  },
-  checkTypes: () => {
-    const extraOptions = getExtraTscParams(argv());
-    return tscTask({ ...extraOptions, noEmit: true });
-  },
+    return tscTask({ ...extraOptions, outDir: 'lib', module: 'commonjs' });
+  }
 };

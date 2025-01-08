@@ -1,5 +1,6 @@
 import { parseModuleRef } from '@rnx-kit/tools-node';
 import ts from 'typescript';
+
 import type { ResolverContext } from './types';
 
 function isPackageRef(name: string): boolean {

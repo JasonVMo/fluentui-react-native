@@ -2,6 +2,40 @@ import type { AllPlatforms } from '@rnx-kit/tools-react-native/platform';
 import type { Project } from '@rnx-kit/typescript-service';
 import type ts from 'typescript';
 
+export type OutputOptions = {
+  /**
+   * Relative path from the package root to the TS output directory
+   */
+  libDir: string;
+
+  /**
+   * TypeScript module kind, paired with this lib directory
+   */
+  module: ts.ModuleKind;
+};
+
+export type BuildTypescriptOptions = {
+  /**
+   * Relative path from the package root to the TS source directory
+   */
+  srcDir: string;
+
+  /**
+   * One or more target outputs of the TypeScript build
+   */
+  outputs?: OutputOptions[];
+
+  /**
+   * Which platforms are relevant for type checking
+   */
+  platforms?: AllPlatforms[];
+
+  /**
+   * Additional TypeScript compiler options
+   */
+  compilerOptions?: ts.CompilerOptions;
+};
+
 export type ProjectInfo = {
   tsproject: Project;
   tssourceFiles: Set<string>;

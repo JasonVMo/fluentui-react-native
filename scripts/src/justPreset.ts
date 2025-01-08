@@ -14,7 +14,7 @@ const { eslint } = require('./tasks/eslint');
 const { depcheckTask } = require('./tasks/depcheck');
 const { checkForModifiedFiles } = require('./tasks/checkForModifiedFilesTask');
 const { findGitRoot } = require('workspace-tools');
-const { checkTypes } = require('./tools-typescript/checkTypes');
+const { buildCommonJSOnly, buildAll } = require('./utils/buildTs');
 
 export function preset() {
   // this add s a resolve path for the build tooling deps like TS from the scripts folder
@@ -31,26 +31,37 @@ export function preset() {
   // for options that have a check/fix switch this puts them into fix mode
   option('fix');
 
+  // run new build style
+  option('newbuild');
+
   task('clean', clean);
   task('copy', copy);
   task('jest', jest);
   task('codegenNativeComponents', codegenNativeComponents);
   task('ts:commonjs', ts.commonjs);
   task('ts:esm', ts.esm);
-  task('eslint', eslint);
+  task('ts:all-new', buildAll), task('ts:commonjs-only-new', buildCommonJSOnly), task('eslint', eslint);
   task('ts:commonjs-only', ts.commonjsOnly);
-  task('checkTypes', checkTypes);
+  task('ts:commonjs-only-new', buildCommonJSOnly);
+  task('ts:both', parallel('ts:commonjs', 'ts:esm'));
   task('prettier', () =>
     argv().fix
       ? prettierTask({ files: ['src/.'], ignorePath: path.join(findGitRoot(process.cwd()), '.prettierignore') })
       : prettierCheckTask({ files: ['src/.'], ignorePath: path.join(findGitRoot(process.cwd()), '.prettierignore') }),
   );
   task('checkForModifiedFiles', checkForModifiedFiles);
-  task('tsall', parallel('ts:commonjs', 'ts:esm'));
+  task(
+    'tsall',
+    series(
+      condition('ts:both', () => !argv().newbuild),
+      condition('ts:all-new', () => !!argv().newbuild),
+    ),
+  );
   task(
     'ts',
     series(
-      condition('ts:commonjs-only', () => !!argv().commonjs),
+      condition('ts:commonjs-only', () => !!argv().commonjs && !argv().newbuild),
+      condition('ts:commonjs-only-new', () => !!argv().commonjs && !!argv().newbuild),
       condition('tsall', () => !argv().commonjs),
     ),
   );

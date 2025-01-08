@@ -20,6 +20,7 @@
     "skipDefaultLibCheck": true,
     "sourceMap": true,
     "jsx": "react",
+    "isolatedModules": true,
     "resolveJsonModule": true
   },
   "baseUrl": ".",

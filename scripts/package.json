@@ -7,7 +7,7 @@
     "fluentui-scripts": "./just-scripts.js"
   },
   "scripts": {
-    "build-tools": "just-scripts build",
+    "build-tools": "tsc",
     "bundlesize": "bundlesize --debug",
     "depcheck": "just-scripts depcheck",
     "prettier": "node ./just-scripts.js prettier",
@@ -28,6 +28,7 @@
     "@react-native-community/cli-platform-ios": "^12.1.1",
     "@react-native/metro-babel-transformer": "^0.73.0",
     "@rnx-kit/jest-preset": "^0.1.14",
+    "@rnx-kit/typescript-service": "^2.0.0",
     "@types/enzyme": "^3.10.5",
     "@types/es6-collections": "^0.5.29",
     "@types/es6-promise": "0.0.32",

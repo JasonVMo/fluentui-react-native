@@ -32,7 +32,7 @@ export function preset() {
   option('fix');
 
   // run new build style
-  option('newbuild');
+  option('oldbuild');
 
   task('clean', clean);
   task('copy', copy);
@@ -40,7 +40,8 @@ export function preset() {
   task('codegenNativeComponents', codegenNativeComponents);
   task('ts:commonjs', ts.commonjs);
   task('ts:esm', ts.esm);
-  task('ts:all-new', buildAll), task('ts:commonjs-only-new', buildCommonJSOnly), task('eslint', eslint);
+  task('ts:all-new', buildAll);
+  task('eslint', eslint);
   task('ts:commonjs-only', ts.commonjsOnly);
   task('ts:commonjs-only-new', buildCommonJSOnly);
   task('ts:both', parallel('ts:commonjs', 'ts:esm'));
@@ -53,15 +54,15 @@ export function preset() {
   task(
     'tsall',
     series(
-      condition('ts:both', () => !argv().newbuild),
-      condition('ts:all-new', () => !!argv().newbuild),
+      condition('ts:both', () => !!argv().oldbuild),
+      condition('ts:all-new', () => !argv().oldbuild),
     ),
   );
   task(
     'ts',
     series(
-      condition('ts:commonjs-only', () => !!argv().commonjs && !argv().newbuild),
-      condition('ts:commonjs-only-new', () => !!argv().commonjs && !!argv().newbuild),
+      condition('ts:commonjs-only', () => !!argv().commonjs && !!argv().oldbuild),
+      condition('ts:commonjs-only-new', () => !!argv().commonjs && !argv().oldbuild),
       condition('tsall', () => !argv().commonjs),
     ),
   );

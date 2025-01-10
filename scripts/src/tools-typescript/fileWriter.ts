@@ -107,7 +107,7 @@ const writeQueue = new WriteQueue(30);
  */
 class BatchHelper {
   public errors: NodeJS.ErrnoException[];
-  public resolvePromise: () => void;
+  public resolvePromise: (errors: NodeJS.ErrnoException[] | null) => void;
 
   private active: number;
   private waiting: boolean;
@@ -129,7 +129,7 @@ class BatchHelper {
     }
     this.active--;
     if (this.finished()) {
-      this.resolvePromise();
+      this.resolvePromise(this.errors);
     }
   }
 
@@ -143,10 +143,10 @@ class BatchHelper {
  */
 export function createBatchWriter() {
   const helper = new BatchHelper();
-  const waitForFinish = new Promise<void>((resolve) => {
+  const waitForFinish = new Promise<NodeJS.ErrnoException[] | null>((resolve) => {
     helper.resolvePromise = resolve;
     if (helper.finished()) {
-      resolve();
+      resolve(helper.errors);
     }
   });
 
@@ -156,9 +156,8 @@ export function createBatchWriter() {
       helper.writeFile(path, content);
     },
     // wait for all writes in this batch to finish and return collected errors
-    finishBatch: () => {
-      waitForFinish.then();
-      return helper.errors.length > 0 ? helper.errors : null;
+    finishBatch: async () => {
+      return Promise.resolve(waitForFinish);
     },
   };
 }

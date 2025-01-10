@@ -14,7 +14,7 @@ const { eslint } = require('./tasks/eslint');
 const { depcheckTask } = require('./tasks/depcheck');
 const { checkForModifiedFiles } = require('./tasks/checkForModifiedFilesTask');
 const { findGitRoot } = require('workspace-tools');
-const { buildCommonJSOnly, buildAll } = require('./utils/buildTs');
+const { buildCommonJSOnly, buildAll, buildAllAsync } = require('./utils/buildTs');
 
 export function preset() {
   // this add s a resolve path for the build tooling deps like TS from the scripts folder
@@ -41,6 +41,7 @@ export function preset() {
   task('ts:commonjs', ts.commonjs);
   task('ts:esm', ts.esm);
   task('ts:all-new', buildAll);
+  task('ts:async', buildAllAsync);
   task('eslint', eslint);
   task('ts:commonjs-only', ts.commonjsOnly);
   task('ts:commonjs-only-new', buildCommonJSOnly);
@@ -88,6 +89,7 @@ export function preset() {
   );
 
   task('build', series('clean', 'copy', 'ts', 'codegenNativeComponents'));
+  task('build:async', series('clean', 'copy', 'ts:async', 'codegenNativeComponents'));
 
   task('depcheck', depcheckTask);
 

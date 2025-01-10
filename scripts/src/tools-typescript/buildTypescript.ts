@@ -2,7 +2,7 @@ import { findConfigFile, readConfigFile } from '@rnx-kit/typescript-service';
 import ts from 'typescript';
 
 import { BuildTask, BuildTaskOptions, createBuildTask } from './createBuildTask';
-import { createBatchWriter } from './fileWriter';
+import { createBatchWriter, FileWriter } from './fileWriter';
 import { BuildTypescriptOptions } from './types';
 
 const defaultOptions: ts.CompilerOptions = {
@@ -54,17 +54,21 @@ function getBaseConfig(cwd: string, extraOptions?: ts.CompilerOptions): ts.Parse
   return extraOptions ? { ...parsedCmdLine, options: { ...defaultOptions, ...parsedCmdLine.options, ...extraOptions } } : parsedCmdLine;
 }
 
-export function buildTypescript({ srcDir = 'src', outputs, compilerOptions }: BuildTypescriptOptions) {
+type BuildTaskEntry = { name: string; exec: BuildTask };
+
+export function buildTypescriptWorker(
+  { srcDir = 'src', outputs, compilerOptions }: BuildTypescriptOptions,
+  writeFile: FileWriter,
+): BuildTaskEntry[] {
   const pkgRoot = process.cwd();
   const cmdLine = getBaseConfig(pkgRoot, { ...defaultOptions, ...sanitizeOptions(compilerOptions) });
-  const tasks: { name: string; exec: BuildTask }[] = [];
+  const tasks: BuildTaskEntry[] = [];
   const baseTaskOptions: BuildTaskOptions = {
     pkgRoot,
     srcDir,
     cmdLine,
     module: ts.ModuleKind.CommonJS,
   };
-  const fileBatch = createBatchWriter();
 
   if (outputs && outputs.length > 0) {
     const emitOnlyOutputs = cmdLine.options.isolatedModules && outputs.length > 1;
@@ -87,7 +91,7 @@ export function buildTypescript({ srcDir = 'src', outputs, compilerOptions }: Bu
             cmdLine: cmdLineWithOutput,
             buildFiles: cmdLine.fileNames,
           },
-          fileBatch.writeFile,
+          writeFile,
         ),
       });
     });
@@ -105,7 +109,7 @@ export function buildTypescript({ srcDir = 'src', outputs, compilerOptions }: Bu
               cmdLine: cmdLineWithOutput,
               emitFiles: cmdLine.fileNames,
             },
-            fileBatch.writeFile,
+            writeFile,
           ),
         });
       });
@@ -114,12 +118,29 @@ export function buildTypescript({ srcDir = 'src', outputs, compilerOptions }: Bu
     const checkFiles = cmdLine.fileNames;
     tasks.push({ name: 'Type check', exec: createBuildTask({ ...baseTaskOptions, checkFiles }) });
   }
+  return tasks;
+}
 
-  Promise.all(tasks.map((task) => task.exec()));
-  fileBatch.finishBatch();
-  /*
+export function buildTypescript(options: BuildTypescriptOptions): void {
+  const tasks = buildTypescriptWorker(options, ts.sys.writeFile);
   for (const task of tasks) {
     task.exec();
   }
-    */
+}
+
+export async function buildTypescriptAsync(options: BuildTypescriptOptions): Promise<void> {
+  const fileBatch = createBatchWriter();
+  const tasks = buildTypescriptWorker(options, fileBatch.writeFile);
+
+  await Promise.all(tasks.map((task) => task.exec()));
+  return new Promise<void>((resolve, reject) => {
+    fileBatch.finishBatch().then((errors) => {
+      if (errors && errors.length > 0) {
+        errors.forEach((err) => console.error(err));
+        reject(new Error('Failed to write files'));
+      } else {
+        resolve();
+      }
+    });
+  });
 }

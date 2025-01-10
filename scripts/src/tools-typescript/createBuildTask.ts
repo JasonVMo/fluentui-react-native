@@ -7,7 +7,7 @@ import ts from 'typescript';
 // create a global service shared across all running tasks executing right now
 const service = new Service();
 
-export type BuildTask = () => [boolean, number];
+export type BuildTask = () => Promise<[boolean, number]>;
 
 export type BuildTaskOptions = {
   // root of the package to build
@@ -96,33 +96,35 @@ export function createBuildTask({
   const libPath = path.join(pkgRoot, libDir);
 
   // now return a worker function that will execute the task and return success/failure + time
-  return () => {
-    const startTime = performance.now();
-    let result = true;
-    if (project) {
-      // iterate through and build files
-      for (const file of buildFiles) {
-        if (!buildFile(project, file, libDir, extraTypeOutputs)) {
-          result = false;
-        }
-      }
-
-      // if we have files to type-check only, do that next
-      if (checkFiles) {
-        for (const file of checkFiles) {
-          if (!project.validateFile(file)) {
+  return async (): Promise<[boolean, number]> => {
+    return new Promise(() => {
+      const startTime = performance.now();
+      let result = true;
+      if (project) {
+        // iterate through and build files
+        for (const file of buildFiles) {
+          if (!buildFile(project, file, libDir, extraTypeOutputs)) {
             result = false;
           }
         }
+
+        // if we have files to type-check only, do that next
+        if (checkFiles) {
+          for (const file of checkFiles) {
+            if (!project.validateFile(file)) {
+              result = false;
+            }
+          }
+        }
       }
-    }
-    // if we have files to emit only, do that now
-    if (emitFiles) {
-      const srcPath = path.join(pkgRoot, srcDir);
-      for (const file of emitFiles) {
-        if (!transpileFile(srcPath, libPath, file, cmdLine.options)) result = false;
+      // if we have files to emit only, do that now
+      if (emitFiles) {
+        const srcPath = path.join(pkgRoot, srcDir);
+        for (const file of emitFiles) {
+          if (!transpileFile(srcPath, libPath, file, cmdLine.options)) result = false;
+        }
       }
-    }
-    return [result, performance.now() - startTime];
+      return [result, performance.now() - startTime];
+    });
   };
 }

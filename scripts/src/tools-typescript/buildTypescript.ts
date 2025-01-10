@@ -107,7 +107,10 @@ export function buildTypescript({ srcDir = 'src', outputs, compilerOptions }: Bu
     tasks.push({ name: 'Type check', exec: createBuildTask({ ...baseTaskOptions, checkFiles }) });
   }
 
+  Promise.all(tasks.map((task) => task.exec()));
+  /*
   for (const task of tasks) {
     task.exec();
   }
+    */
 }

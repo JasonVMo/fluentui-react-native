@@ -1,6 +1,8 @@
 import events from 'events';
 import fs from 'fs';
 
+export type FileWriter = (path: string, content: string) => void;
+
 type WriteFileNode = {
   path: fs.PathLike | number;
   data: any;
@@ -98,7 +100,7 @@ class WriteQueue {
 }
 
 // create a global write queue to ensure we don't write too many files at once
-const writeQueue = new WriteQueue(10);
+const writeQueue = new WriteQueue(30);
 
 /**
  * Helper class for managing a batch of file writes

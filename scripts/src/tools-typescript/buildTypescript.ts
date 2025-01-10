@@ -2,6 +2,7 @@ import { findConfigFile, readConfigFile } from '@rnx-kit/typescript-service';
 import ts from 'typescript';
 
 import { BuildTask, BuildTaskOptions, createBuildTask } from './createBuildTask';
+import { createBatchWriter } from './fileWriter';
 import { BuildTypescriptOptions } from './types';
 
 const defaultOptions: ts.CompilerOptions = {
@@ -63,6 +64,7 @@ export function buildTypescript({ srcDir = 'src', outputs, compilerOptions }: Bu
     cmdLine,
     module: ts.ModuleKind.CommonJS,
   };
+  const fileBatch = createBatchWriter();
 
   if (outputs && outputs.length > 0) {
     const emitOnlyOutputs = cmdLine.options.isolatedModules && outputs.length > 1;
@@ -76,14 +78,17 @@ export function buildTypescript({ srcDir = 'src', outputs, compilerOptions }: Bu
       const cmdLineWithOutput = { ...cmdLine, options: { ...cmdLine.options, outDir: libDir, module } };
       tasks.push({
         name: `Build ${libDir}`,
-        exec: createBuildTask({
-          ...baseTaskOptions,
-          libDir,
-          module,
-          extraTypeOutputs,
-          cmdLine: cmdLineWithOutput,
-          buildFiles: cmdLine.fileNames,
-        }),
+        exec: createBuildTask(
+          {
+            ...baseTaskOptions,
+            libDir,
+            module,
+            extraTypeOutputs,
+            cmdLine: cmdLineWithOutput,
+            buildFiles: cmdLine.fileNames,
+          },
+          fileBatch.writeFile,
+        ),
       });
     });
     if (emitOutputs && emitOutputs.length > 0) {
@@ -92,13 +97,16 @@ export function buildTypescript({ srcDir = 'src', outputs, compilerOptions }: Bu
         const cmdLineWithOutput = { ...cmdLine, options: { ...cmdLine.options, outDir: libDir, module } };
         tasks.push({
           name: `Emit ${libDir}`,
-          exec: createBuildTask({
-            ...baseTaskOptions,
-            libDir,
-            module,
-            cmdLine: cmdLineWithOutput,
-            emitFiles: cmdLine.fileNames,
-          }),
+          exec: createBuildTask(
+            {
+              ...baseTaskOptions,
+              libDir,
+              module,
+              cmdLine: cmdLineWithOutput,
+              emitFiles: cmdLine.fileNames,
+            },
+            fileBatch.writeFile,
+          ),
         });
       });
     }
@@ -108,6 +116,7 @@ export function buildTypescript({ srcDir = 'src', outputs, compilerOptions }: Bu
   }
 
   Promise.all(tasks.map((task) => task.exec()));
+  fileBatch.finishBatch();
   /*
   for (const task of tasks) {
     task.exec();

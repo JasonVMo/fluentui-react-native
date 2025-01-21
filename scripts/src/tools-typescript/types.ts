@@ -41,6 +41,17 @@ export type ProjectInfo = {
   tssourceFiles: Set<string>;
 };
 
+export type FileOperationList = {
+  // files that need to emit output files
+  build: string[];
+
+  // files that only need to be typechecked
+  check: string[];
+
+  // optional platform the operations apply to
+  platform?: AllPlatforms;
+};
+
 /**
  * Collection of TypeScript projects, separated by their target platform.
  *

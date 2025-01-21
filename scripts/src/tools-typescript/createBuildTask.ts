@@ -5,21 +5,26 @@ import { Project, Service } from '@rnx-kit/typescript-service';
 import ts from 'typescript';
 
 import { FileWriter } from './fileWriter';
+import { getModuleSuffixes } from './platform';
 
 // create a global service shared across all running tasks executing right now
 const service = new Service();
 
 export type BuildTask = () => Promise<[boolean, number]>;
+type BuildTaskSync = () => [boolean, number];
 
 export type BuildTaskOptions = {
   // root of the package to build
   pkgRoot: string;
 
-  /// relative path from the package root to the TS source directory, defaults to 'src'
-  srcDir?: string;
+  /// relative path from the package root to the TS source directory
+  srcDir: string;
 
-  // relative path from the package root to the TS output directory, defaults to 'lib'
-  libDir?: string;
+  // relative path from the package root to the TS output directory
+  outDir?: string;
+
+  // files to process
+  files: string[];
 
   // TypeScript module setting for transpilation in this lib directory
   module: ts.ModuleKind;
@@ -33,19 +38,9 @@ export type BuildTaskOptions = {
   // base parsed command line for this command
   cmdLine: ts.ParsedCommandLine;
 
-  // file names to build and type-check
-  buildFiles?: string[];
-
-  // file names to type-check only
-  checkFiles?: string[];
-
-  // files names to emit only
-  emitFiles?: string[];
+  // file writer function
+  writeFile: FileWriter;
 };
-
-function defaultWriter(file: string, text: string): void {
-  ts.sys.writeFile(file, text);
-}
 
 function buildFile(project: Project, file: string, libDir: string, writeFile: FileWriter, extraTypePaths?: string[]): boolean {
   const output = project.langService().getEmitOutput(file);
@@ -68,6 +63,52 @@ function buildFile(project: Project, file: string, libDir: string, writeFile: Fi
   return true;
 }
 
+function createBuildTaskWorker({
+  platform,
+  module,
+  files,
+  cmdLine,
+  outDir,
+  extraTypeOutputs,
+  writeFile,
+}: BuildTaskOptions): [boolean, number] {
+  const startTime = performance.now();
+
+  // setup the parsed command line and open the project for typechecking
+  const moduleSuffixes = platform ? getModuleSuffixes(platform) : undefined;
+  cmdLine = { ...cmdLine, fileNames: files, options: { ...cmdLine.options, module, moduleSuffixes, outDir } };
+  const project = service.openProject(cmdLine);
+
+  // now build each file
+  let result = true;
+  files.forEach((file) => {
+    if (!buildFile(project, file, outDir, writeFile, extraTypeOutputs)) {
+      result = false;
+    }
+  });
+
+  return [result, performance.now() - startTime];
+}
+
+function createCheckTaskWorker({ platform, module, files, cmdLine }: BuildTaskOptions): [boolean, number] {
+  const startTime = performance.now();
+
+  // setup the parsed command line and open the project for typechecking
+  const moduleSuffixes = platform ? getModuleSuffixes(platform) : undefined;
+  cmdLine = { ...cmdLine, fileNames: files, options: { ...cmdLine.options, module, moduleSuffixes } };
+  const project = service.openProject(cmdLine);
+
+  // now validate each file
+  let result = true;
+  files.forEach((file) => {
+    if (!project.validateFile(file)) {
+      result = false;
+    }
+  });
+
+  return [result, performance.now() - startTime];
+}
+
 function transpileFile(srcPath: string, libPath: string, fileName: string, options: ts.CompilerOptions, writeFile: FileWriter): boolean {
   const { outputText, sourceMapText } = ts.transpileModule(ts.sys.readFile(fileName), { compilerOptions: options });
   if (outputText) {
@@ -80,61 +121,53 @@ function transpileFile(srcPath: string, libPath: string, fileName: string, optio
   return !!outputText;
 }
 
-export function createBuildTask(
-  {
-    pkgRoot,
-    srcDir = 'src',
-    libDir = 'lib',
-    module,
-    // platform,
-    extraTypeOutputs,
-    cmdLine,
-    buildFiles,
-    checkFiles,
-    emitFiles,
-  }: BuildTaskOptions,
-  writeFile?: FileWriter,
-): BuildTask {
-  // clone the cmdLine to reflect an overridden module and platform
-  cmdLine = { ...cmdLine, options: { ...cmdLine.options, module, outDir: libDir } };
-  writeFile = writeFile || defaultWriter;
+function createEmitTaskWorker({ srcDir, outDir, pkgRoot, module, files, cmdLine, writeFile }: BuildTaskOptions): [boolean, number] {
+  const startTime = performance.now();
+  const srcPath = path.join(pkgRoot, srcDir);
+  const libPath = path.join(pkgRoot, outDir);
+  const options = { ...cmdLine.options, module, outDir };
 
-  // create a project if we have buildFiles or checkFiles, emit doesn't require a full project
-  const project = buildFiles || checkFiles ? service.openProject(cmdLine) : undefined;
+  let result = true;
+  for (const file of files) {
+    if (!transpileFile(srcPath, libPath, file, options, writeFile)) {
+      result = false;
+    }
+  }
+  return [result, performance.now() - startTime];
+}
 
-  // make the lib paths into absolute paths
-  const libPath = path.join(pkgRoot, libDir);
+export function createBuildTask(options: BuildTaskOptions): BuildTaskSync {
+  return () => {
+    return createBuildTaskWorker(options);
+  };
+}
 
-  // now return a worker function that will execute the task and return success/failure + time
-  return async (): Promise<[boolean, number]> => {
-    return new Promise(() => {
-      const startTime = performance.now();
-      let result = true;
-      if (project) {
-        // iterate through and build files
-        for (const file of buildFiles) {
-          if (!buildFile(project, file, libDir, writeFile, extraTypeOutputs)) {
-            result = false;
-          }
-        }
+export function createCheckTask(options: BuildTaskOptions): BuildTaskSync {
+  return () => {
+    return createCheckTaskWorker(options);
+  };
+}
 
-        // if we have files to type-check only, do that next
-        if (checkFiles) {
-          for (const file of checkFiles) {
-            if (!project.validateFile(file)) {
-              result = false;
-            }
-          }
-        }
-      }
-      // if we have files to emit only, do that now
-      if (emitFiles) {
-        const srcPath = path.join(pkgRoot, srcDir);
-        for (const file of emitFiles) {
-          if (!transpileFile(srcPath, libPath, file, cmdLine.options, writeFile)) result = false;
-        }
-      }
-      return [result, performance.now() - startTime];
-    });
+export function createEmitTask(options: BuildTaskOptions): BuildTaskSync {
+  return () => {
+    return createEmitTaskWorker(options);
+  };
+}
+
+export function createAsyncBuildTask(options: BuildTaskOptions): BuildTask {
+  return async () => {
+    return createBuildTaskWorker(options);
+  };
+}
+
+export function createAsyncCheckTask(options: BuildTaskOptions): BuildTask {
+  return async () => {
+    return createCheckTaskWorker(options);
+  };
+}
+
+export function createAsyncEmitTask(options: BuildTaskOptions): BuildTask {
+  return async () => {
+    return createEmitTaskWorker(options);
   };
 }

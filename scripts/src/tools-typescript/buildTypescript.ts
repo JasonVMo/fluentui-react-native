@@ -4,6 +4,8 @@ import ts from 'typescript';
 import { BuildTask, BuildTaskOptions, createBuildTask } from './createBuildTask';
 import { createBatchWriter, FileWriter } from './fileWriter';
 import { BuildTypescriptOptions } from './types';
+import { getFileOperations, getReactNativePlatforms } from './platform';
+import { getPackageBuildInfo } from './packageBuildInfo';
 
 const defaultOptions: ts.CompilerOptions = {
   pretty: true,
@@ -57,9 +59,10 @@ function getBaseConfig(cwd: string, extraOptions?: ts.CompilerOptions): ts.Parse
 type BuildTaskEntry = { name: string; exec: BuildTask };
 
 export function buildTypescriptWorker(
-  { srcDir = 'src', outputs, compilerOptions }: BuildTypescriptOptions,
+  { srcDir = 'src', outputs, compilerOptions, platforms }: BuildTypescriptOptions,
   writeFile: FileWriter,
 ): BuildTaskEntry[] {
+  const { pkgRoot, platforms, cmdLine } = getPackageBuildInfo();
   const pkgRoot = process.cwd();
   const cmdLine = getBaseConfig(pkgRoot, { ...defaultOptions, ...sanitizeOptions(compilerOptions) });
   const tasks: BuildTaskEntry[] = [];
@@ -69,6 +72,27 @@ export function buildTypescriptWorker(
     cmdLine,
     module: ts.ModuleKind.CommonJS,
   };
+
+  platforms = platforms || getReactNativePlatforms(pkgRoot);
+  outputs = outputs || [];
+  const operations = getFileOperations(cmdLine.fileNames, !outputs || outputs.length === 0, platforms);
+
+  // figure out whether there are emit outputs
+  const emitOnlyOutputs = outputs.length > 1 && cmdLine.options.isolatedModules;
+  const buildOutputs = emitOnlyOutputs ? [outputs[0]] : outputs;
+  const emitOutputs = emitOnlyOutputs ? outputs.slice(1) : [];
+  const extraTypeOutputs = emitOnlyOutputs ? emitOutputs.map((o) => o.libDir) : undefined;
+
+  operations.forEach((op) => {
+
+  });
+
+  if (emitOutputs) {
+    const options = 
+    emitOutputs.forEach((output) => {
+
+    })
+  }
 
   if (outputs && outputs.length > 0) {
     const emitOnlyOutputs = cmdLine.options.isolatedModules && outputs.length > 1;

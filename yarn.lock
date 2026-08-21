@@ -3463,6 +3463,7 @@ __metadata:
   resolution: "@fluentui-react-native/design@workspace:packages/agentic/design"
   dependencies:
     "@babel/core": "catalog:"
+    "@fluentui-react-native/adapters": "workspace:*"
     "@fluentui-react-native/design-tokens-android": "catalog:"
     "@fluentui-react-native/design-tokens-ios": "catalog:"
     "@fluentui-react-native/design-tokens-macos": "catalog:"
@@ -3478,6 +3479,7 @@ __metadata:
     "@rnx-kit/tools-filesystem": "npm:^0.2.0"
     "@types/react": "npm:~19.1.4"
     "@types/react-test-renderer": "npm:^19.1.0"
+    assert-never: "npm:^1.2.1"
     react: "npm:19.1.4"
     react-native: "npm:^0.81.6"
     react-native-macos: "npm:^0.81.0"
@@ -5482,23 +5484,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fluentui-react-native/theme-tokens@workspace:*, @fluentui-react-native/theme-tokens@workspace:packages/theming/theme-tokens":
+"@fluentui-react-native/theme-tokens@workspace:*, @fluentui-react-native/theme-tokens@workspace:packages/shim/theme-tokens":
   version: 0.0.0-use.local
-  resolution: "@fluentui-react-native/theme-tokens@workspace:packages/theming/theme-tokens"
+  resolution: "@fluentui-react-native/theme-tokens@workspace:packages/shim/theme-tokens"
   dependencies:
     "@babel/core": "catalog:"
     "@fluentui-react-native/design": "workspace:*"
-    "@fluentui-react-native/design-tokens-android": "catalog:"
-    "@fluentui-react-native/design-tokens-ios": "catalog:"
-    "@fluentui-react-native/design-tokens-win32": "catalog:"
-    "@fluentui-react-native/design-tokens-windows": "catalog:"
     "@fluentui-react-native/scripts": "workspace:*"
     "@react-native-community/cli": "npm:^20.0.0"
     "@react-native-community/cli-platform-android": "npm:^20.0.0"
     "@react-native-community/cli-platform-ios": "npm:^20.0.0"
     "@react-native/metro-config": "npm:^0.81.0"
     "@types/react": "npm:~19.1.4"
-    assert-never: "npm:^1.2.1"
     react: "npm:19.1.4"
     react-native: "npm:^0.81.6"
   peerDependencies:
@@ -5578,12 +5575,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fluentui-react-native/themed-stylesheet@workspace:*, @fluentui-react-native/themed-stylesheet@workspace:packages/framework/themed-stylesheet":
+"@fluentui-react-native/themed-stylesheet@workspace:*, @fluentui-react-native/themed-stylesheet@workspace:packages/shim/themed-stylesheet":
   version: 0.0.0-use.local
-  resolution: "@fluentui-react-native/themed-stylesheet@workspace:packages/framework/themed-stylesheet"
+  resolution: "@fluentui-react-native/themed-stylesheet@workspace:packages/shim/themed-stylesheet"
   dependencies:
     "@babel/core": "catalog:"
-    "@fluentui-react-native/framework-base": "workspace:*"
+    "@fluentui-react-native/design": "workspace:*"
     "@fluentui-react-native/scripts": "workspace:*"
     "@react-native-community/cli": "npm:^20.0.0"
     "@react-native-community/cli-platform-android": "npm:^20.0.0"
@@ -5603,16 +5600,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fluentui-react-native/theming-utils@workspace:*, @fluentui-react-native/theming-utils@workspace:packages/theming/theming-utils":
+"@fluentui-react-native/theming-utils@workspace:*, @fluentui-react-native/theming-utils@workspace:packages/shim/theming-utils":
   version: 0.0.0-use.local
-  resolution: "@fluentui-react-native/theming-utils@workspace:packages/theming/theming-utils"
+  resolution: "@fluentui-react-native/theming-utils@workspace:packages/shim/theming-utils"
   dependencies:
     "@babel/core": "catalog:"
     "@fluentui-react-native/design": "workspace:*"
     "@fluentui-react-native/design-tokens-win32": "catalog:"
     "@fluentui-react-native/design-tokens-windows": "catalog:"
     "@fluentui-react-native/scripts": "workspace:*"
-    "@fluentui-react-native/tokens": "workspace:*"
     "@react-native-community/cli": "npm:^20.0.0"
     "@react-native-community/cli-platform-android": "npm:^20.0.0"
     "@react-native-community/cli-platform-ios": "npm:^20.0.0"
@@ -5642,12 +5638,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fluentui-react-native/tokens@workspace:*, @fluentui-react-native/tokens@workspace:packages/utils/tokens":
+"@fluentui-react-native/tokens@workspace:*, @fluentui-react-native/tokens@workspace:packages/shim/tokens":
   version: 0.0.0-use.local
-  resolution: "@fluentui-react-native/tokens@workspace:packages/utils/tokens"
+  resolution: "@fluentui-react-native/tokens@workspace:packages/shim/tokens"
   dependencies:
     "@babel/core": "catalog:"
-    "@fluentui-react-native/adapters": "workspace:*"
     "@fluentui-react-native/design": "workspace:*"
     "@fluentui-react-native/scripts": "workspace:*"
     "@react-native-community/cli": "npm:^20.0.0"
@@ -5745,14 +5740,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fluentui-react-native/use-styling@workspace:*, @fluentui-react-native/use-styling@workspace:packages/framework/use-styling":
+"@fluentui-react-native/use-styling@workspace:*, @fluentui-react-native/use-styling@workspace:packages/shim/use-styling":
   version: 0.0.0-use.local
-  resolution: "@fluentui-react-native/use-styling@workspace:packages/framework/use-styling"
+  resolution: "@fluentui-react-native/use-styling@workspace:packages/shim/use-styling"
   dependencies:
     "@babel/core": "catalog:"
-    "@fluentui-react-native/framework-base": "workspace:*"
+    "@fluentui-react-native/design": "workspace:*"
     "@fluentui-react-native/scripts": "workspace:*"
-    "@fluentui-react-native/use-tokens": "workspace:*"
     "@react-native-community/cli": "npm:^20.0.0"
     "@react-native-community/cli-platform-android": "npm:^20.0.0"
     "@react-native-community/cli-platform-ios": "npm:^20.0.0"
@@ -5774,12 +5768,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fluentui-react-native/use-tokens@workspace:*, @fluentui-react-native/use-tokens@workspace:packages/framework/use-tokens":
+"@fluentui-react-native/use-tokens@workspace:*, @fluentui-react-native/use-tokens@workspace:packages/shim/use-tokens":
   version: 0.0.0-use.local
-  resolution: "@fluentui-react-native/use-tokens@workspace:packages/framework/use-tokens"
+  resolution: "@fluentui-react-native/use-tokens@workspace:packages/shim/use-tokens"
   dependencies:
     "@babel/core": "catalog:"
-    "@fluentui-react-native/framework-base": "workspace:*"
+    "@fluentui-react-native/design": "workspace:*"
     "@fluentui-react-native/scripts": "workspace:*"
     "@react-native-community/cli": "npm:^20.0.0"
     "@react-native-community/cli-platform-android": "npm:^20.0.0"

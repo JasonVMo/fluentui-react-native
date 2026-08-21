@@ -1,0 +1,36 @@
+// This package is a compatibility shim. Token style helpers now live in
+// `@fluentui-react-native/design/tokens/styles`.
+export {
+  backgroundColorTokens,
+  borderStyles,
+  borderTokens,
+  colorTokens,
+  fontStyles,
+  foregroundColorTokens,
+  getPaletteFromTheme,
+  layoutStyles,
+  layoutTokens,
+  shadowStyles,
+  shadowTokens,
+  styleFunction,
+  textTokens,
+  tokenBuilder,
+} from '@fluentui-react-native/design/tokens/styles';
+export type {
+  FontDecorationTokens,
+  FontStyleTokens,
+  FontTokens,
+  FontVariantTokens,
+  IBackgroundColorTokens,
+  IBorderTokens,
+  IColorTokens,
+  IForegroundColorTokens,
+  IShadowTokens,
+  LayoutTokens,
+  LookupThemePart,
+  OperationSet,
+  StyleFactoryFunction,
+  StyleFactoryFunctionRaw,
+  StyleFactoryOperation,
+  TokenBuilder,
+} from '@fluentui-react-native/design/tokens/styles';

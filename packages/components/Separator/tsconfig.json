@@ -21,7 +21,7 @@
       "path": "../../../scripts/tsconfig.json"
     },
     {
-      "path": "../../framework/use-styling/tsconfig.json"
+      "path": "../../shim/use-styling/tsconfig.json"
     }
   ]
 }

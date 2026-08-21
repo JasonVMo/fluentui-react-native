@@ -75,4 +75,4 @@ export const Component = (props: TProps) => {
 };
 ```
 
-This hook is what the `compose` framework uses to create style tokens based on the current theme. You can read more on `useTokens` [here](../../../../packages/framework/use-tokens/README.md).
+This hook is what the `compose` framework uses to create style tokens based on the current theme. You can read more on `useTokens` [here](../../../../packages/shim/use-tokens/README.md).

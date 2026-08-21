@@ -26,6 +26,18 @@
       "import": "./lib/tokens/global.generated.js",
       "default": "./src/tokens/global.generated.ts"
     },
+    "./tokens/theme": {
+      "types": "./lib/tokens/theme/index.d.ts",
+      "react-native": "./src/tokens/theme/index.ts",
+      "import": "./lib/tokens/theme/index.js",
+      "default": "./src/tokens/theme/index.ts"
+    },
+    "./tokens/styles": {
+      "types": "./lib/tokens/styles/index.d.ts",
+      "react-native": "./src/tokens/styles/index.ts",
+      "import": "./lib/tokens/styles/index.js",
+      "default": "./src/tokens/styles/index.ts"
+    },
     "./theming": {
       "types": "./lib/theming/index.d.ts",
       "react-native": "./src/theming/index.ts",
@@ -44,6 +56,24 @@
       "import": "./lib/styling/index.js",
       "default": "./src/styling/index.ts"
     },
+    "./use-tokens": {
+      "types": "./lib/use-tokens/index.d.ts",
+      "react-native": "./src/use-tokens/index.ts",
+      "import": "./lib/use-tokens/index.js",
+      "default": "./src/use-tokens/index.ts"
+    },
+    "./use-styling": {
+      "types": "./lib/use-styling/index.d.ts",
+      "react-native": "./src/use-styling/index.ts",
+      "import": "./lib/use-styling/index.js",
+      "default": "./src/use-styling/index.ts"
+    },
+    "./themed-stylesheet": {
+      "types": "./lib/themed-stylesheet/index.d.ts",
+      "react-native": "./src/themed-stylesheet/index.ts",
+      "import": "./lib/themed-stylesheet/index.js",
+      "default": "./src/themed-stylesheet/index.ts"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -56,15 +86,17 @@
     "update-snapshots": "fluentui-scripts jest -u"
   },
   "dependencies": {
-    "@fluentui-react-native/framework-base": "workspace:*"
+    "@fluentui-react-native/adapters": "workspace:*",
+    "@fluentui-react-native/design-tokens-android": "catalog:",
+    "@fluentui-react-native/design-tokens-ios": "catalog:",
+    "@fluentui-react-native/design-tokens-win32": "catalog:",
+    "@fluentui-react-native/design-tokens-windows": "catalog:",
+    "@fluentui-react-native/framework-base": "workspace:*",
+    "assert-never": "^1.2.1"
   },
   "devDependencies": {
     "@babel/core": "catalog:",
-    "@fluentui-react-native/design-tokens-android": "catalog:",
-    "@fluentui-react-native/design-tokens-ios": "catalog:",
     "@fluentui-react-native/design-tokens-macos": "catalog:",
-    "@fluentui-react-native/design-tokens-win32": "catalog:",
-    "@fluentui-react-native/design-tokens-windows": "catalog:",
     "@fluentui-react-native/scripts": "workspace:*",
     "@office-iss/react-native-win32": "^0.81.0",
     "@react-native-community/cli": "^20.0.0",

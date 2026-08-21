@@ -28,16 +28,16 @@
       "path": "../../../scripts/tsconfig.json"
     },
     {
-      "path": "../../utils/tokens/tsconfig.json"
+      "path": "../../shim/tokens/tsconfig.json"
     },
     {
       "path": "../use-slots/tsconfig.json"
     },
     {
-      "path": "../use-styling/tsconfig.json"
+      "path": "../../shim/use-styling/tsconfig.json"
     },
     {
-      "path": "../use-tokens/tsconfig.json"
+      "path": "../../shim/use-tokens/tsconfig.json"
     }
   ]
 }

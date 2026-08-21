@@ -18,7 +18,7 @@
       "path": "../use-slots/tsconfig.json"
     },
     {
-      "path": "../use-styling/tsconfig.json"
+      "path": "../../shim/use-styling/tsconfig.json"
     }
   ]
 }

@@ -6,11 +6,11 @@
 
 ## Platform Themes
 
-[Apple-theme](./apple-theme/README.md)  
-[Win32-theme](./win32-theme/README.md)  
+[Apple-theme](./apple-theme/README.md)
+[Win32-theme](./win32-theme/README.md)
 [Android-theme](./android-theme/README.md)
 
 ## Theme types and utilities
 
-[Theme-types](./theme-types/README.md)  
-[Theme-tokens](./theme-tokens/README.md)
+[Theme-types](../shim/theme-types/README.md)
+[Theme-tokens](../shim/theme-tokens/README.md)

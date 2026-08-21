@@ -185,22 +185,34 @@
       "path": "packages/framework/theme/tsconfig.json"
     },
     {
-      "path": "packages/shim/themed-stylesheet/tsconfig.json"
-    },
-    {
       "path": "packages/framework/use-slots/tsconfig.json"
-    },
-    {
-      "path": "packages/shim/use-styling/tsconfig.json"
-    },
-    {
-      "path": "packages/shim/use-tokens/tsconfig.json"
     },
     {
       "path": "packages/libraries/core/tsconfig.json"
     },
     {
       "path": "packages/native/Callout/tsconfig.json"
+    },
+    {
+      "path": "packages/shim/theme-tokens/tsconfig.json"
+    },
+    {
+      "path": "packages/shim/theme-types/tsconfig.json"
+    },
+    {
+      "path": "packages/shim/themed-stylesheet/tsconfig.json"
+    },
+    {
+      "path": "packages/shim/theming-utils/tsconfig.json"
+    },
+    {
+      "path": "packages/shim/tokens/tsconfig.json"
+    },
+    {
+      "path": "packages/shim/use-styling/tsconfig.json"
+    },
+    {
+      "path": "packages/shim/use-tokens/tsconfig.json"
     },
     {
       "path": "packages/theming/android-theme/tsconfig.json"
@@ -210,15 +222,6 @@
     },
     {
       "path": "packages/theming/default-theme/tsconfig.json"
-    },
-    {
-      "path": "packages/shim/theme-tokens/tsconfig.json"
-    },
-    {
-      "path": "packages/theming/theme-types/tsconfig.json"
-    },
-    {
-      "path": "packages/shim/theming-utils/tsconfig.json"
     },
     {
       "path": "packages/theming/win32-theme/tsconfig.json"
@@ -234,9 +237,6 @@
     },
     {
       "path": "packages/utils/test-tools/tsconfig.json"
-    },
-    {
-      "path": "packages/shim/tokens/tsconfig.json"
     },
     {
       "path": "scripts/tsconfig.json"

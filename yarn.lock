@@ -5514,9 +5514,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fluentui-react-native/theme-types@workspace:packages/theming/theme-types":
+"@fluentui-react-native/theme-types@workspace:packages/shim/theme-types":
   version: 0.0.0-use.local
-  resolution: "@fluentui-react-native/theme-types@workspace:packages/theming/theme-types"
+  resolution: "@fluentui-react-native/theme-types@workspace:packages/shim/theme-types"
   dependencies:
     "@babel/core": "catalog:"
     "@fluentui-react-native/design": "workspace:*"
